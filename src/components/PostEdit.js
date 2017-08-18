@@ -13,14 +13,6 @@ import { withRouter } from 'react-router';
 
 class PostEdit extends Component {
 
-  // var postId = null;
-  // propTypes
-
-  // static propTypes = {
-  //   contacts: PropTypes.array.isRequired,
-  //   onDeleteContact: PropTypes.func.isRequired
-  // }
-
   state = {
     createSuccess:false,
     createError:null,
@@ -37,6 +29,7 @@ class PostEdit extends Component {
 
   // check postId here
   checkIfUpdate = () => {
+    
     if ( this.props.match && this.props.match.params && this.props.match.params.postId ) {
       this.postId = this.props.match.params.postId;
     }

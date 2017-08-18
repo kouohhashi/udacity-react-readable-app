@@ -9,6 +9,7 @@ import { apiGetPosts } from '../actions'
 
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
+import { Link } from 'react-router-dom'
 
 class PostList extends Component {
 
@@ -16,11 +17,13 @@ class PostList extends Component {
     sortMethod: 'vote',
     timeWeight: 'normal',
     voteWeight: 'bold',
-    filterCategory: null,
   }
 
   // lets get category here
   componentDidMount() {
+
+    console.log("props:", this.props)
+
     MyAPI.getAllPosts().then((data) => {
       const posts = data.filter( (post) => post.deleted !== true )
       this.props.mapDispatchToPropsGetPosts(posts)
@@ -42,23 +45,16 @@ class PostList extends Component {
       voteWeight: 'bold',
     })
   }
-
-  setFilterCategory = (category) => {
-    this.setState({
-      filterCategory: category.path
-    })
-  }
-
-  clearFilter = () => {
-    this.setState({
-      filterCategory: null
-    })
-  }
-
+  
   render() {
 
+    let filterCategory = null;
+    if (this.props.match && this.props.match.params && this.props.match.params.category) {
+      filterCategory = this.props.match.params.category;
+    }
+
     let postList = []
-    if (this.state.filterCategory === null){
+    if (filterCategory === null){
       if (this.state.sortMethod === 'time') {
         postList = postList.concat(this.props.posts.list)
                     .sort((a, b) => a.timestamp < b.timestamp)
@@ -69,18 +65,18 @@ class PostList extends Component {
         postList = postList.concat(this.props.posts.list)
       }
     } else {
-      
+
       if (this.state.sortMethod === 'time') {
         postList = postList.concat(this.props.posts.list)
-                    .filter( (item) => item.category === this.state.filterCategory )
+                    .filter( (item) => item.category === filterCategory )
                     .sort((a, b) => a.timestamp < b.timestamp)
       } else if (this.state.sortMethod === 'vote') {
         postList = postList.concat(this.props.posts.list)
-                    .filter( (item) => item.category === this.state.filterCategory )
+                    .filter( (item) => item.category === filterCategory )
                     .sort((a, b) => a.voteScore < b.voteScore)
       } else {
         postList = postList.concat(this.props.posts.list)
-                    .filter( (item) => item.category === this.state.filterCategory )
+                    .filter( (item) => item.category === filterCategory )
       }
     }
 
@@ -115,24 +111,25 @@ class PostList extends Component {
 
             {this.props.categories && this.props.categories.list &&
               this.props.categories.list.map( (category) => (
-                <span
-                  key={category.path}
-                  onClick={() => this.setFilterCategory(category)}
-                  style={{
-                    marginLeft: 5,
-                    marginRight: 5,
-                    cursor: 'pointer',
-                    fontWeight: this.state.filterCategory === category.path ? 'bold' : 'normal'
-                  }}>{category.name}</span>
+                <Link key={category.path} to={'/'+category.path }>
+                  <span
+                    style={{
+                      marginLeft: 5,
+                      marginRight: 5,
+                      cursor: 'pointer',
+                      fontWeight: filterCategory === category.path ? 'bold' : 'normal'
+                    }}>{category.name}</span>
+                </Link>
               ) )
             }
 
-            <span
-              onClick={this.clearFilter}
-              style={{
-                cursor: 'pointer',
-                fontWeight: this.state.filterCategory === null ? 'bold' : 'normal'
-              }}>show all</span>
+            <Link to='/'>
+              <span
+                style={{
+                  cursor: 'pointer',
+                  fontWeight: filterCategory === null ? 'bold' : 'normal'
+                }}>show all</span>
+            </Link>
 
           </div>
         </div>

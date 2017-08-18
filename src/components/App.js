@@ -21,11 +21,6 @@ import { withRouter } from 'react-router';
 
 class App extends Component {
 
-  // // state parameters
-  // state = {
-  //   categories: []
-  // }
-
   // lets get category here
   componentDidMount() {
     MyAPI.getCategories().then((data) => {
@@ -40,14 +35,30 @@ class App extends Component {
 
         <Switch>
 
-          <Route path='/post/:postId' component={PostDetail}/>
-
           <Route exact path='/ceate_post' render={() => (
             <PostEdit />
           )} />
 
           <Route exact path='/update_post/:postId' render={() => (
             <PostEdit />
+          )} />
+
+          <Route exact path='/:category' render={() => (
+            <div className='container'>
+
+              <div className='row' style={{
+                marginTop:30,
+                marginBottom:30
+              }}>
+                <div className='col-md-12' style={{
+                  textAlign: 'right'
+                }}>
+                  <Link to="/ceate_post">Create a post</Link>
+                </div>
+              </div>
+
+              <PostList />
+            </div>
           )} />
 
           <Route exact path='/' render={() => (
@@ -67,6 +78,8 @@ class App extends Component {
               <PostList />
             </div>
           )} />
+
+          <Route path='/:category/:postId' component={PostDetail}/>
 
           <Route component={NoMatch} />
 

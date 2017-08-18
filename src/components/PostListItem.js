@@ -56,7 +56,7 @@ class PostListItem extends Component {
         <div className='row'>
           <div className='col-md-2'></div>
           <div className='col-md-8' style={{ textAlign: 'left', fontSize:18 }}>
-            <Link to={'/post/'+this.props.post.id }>{this.props.post.title}</Link>
+            <Link to={'/'+this.props.post.category+'/'+this.props.post.id }>{this.props.post.title}</Link>
           </div>
           <div className='col-md-2'></div>
         </div>
