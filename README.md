@@ -17,7 +17,7 @@ npm install
 npm run start
 ```
 
-You also need to install reactnd-project-readable-starter for backend.
+You also need to install [reactnd-project-readable-starter](https://github.com/udacity/reactnd-project-readable-starter) for backend.
 
 ## License
 udacity-a-book-tracking-app  is a public domain work. Feel free to do whatever you want with it.
