@@ -3,7 +3,7 @@ import * as MyAPI from '../utils/MyAPI'
 import shortid from 'shortid'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router';
-import { apiGetComments, apiAddComment } from '../actions'
+import { apiGetComments, apiAddComment } from '../actions/CommentsActions'
 import CommentOnPostItem from './CommentOnPostItem'
 
 class CommentOnPost extends Component {
@@ -12,14 +12,17 @@ class CommentOnPost extends Component {
     sortMethod: 'vote',
     timeWeight: 'normal',
     voteWeight: 'bold',
+    errorMessage: null,
   }
 
   addComment = () => {
 
     if (!this.commentBody.value){
+      this.setState({errorMessage: 'Please input body'})
       return;
     }
     if (!this.commentName.value){
+      this.setState({errorMessage: 'Please input your name'})
       return;
     }
 
@@ -62,6 +65,10 @@ class CommentOnPost extends Component {
       timeWeight: 'normal',
       voteWeight: 'bold',
     })
+  }
+
+  inputSomething = () => {
+    this.setState({errorMessage: null})
   }
 
   render(){
@@ -118,9 +125,18 @@ class CommentOnPost extends Component {
 
         <div className='row' style={{marginTop: 30}}>
           <div className='col-md-3'></div>
+          <div className='col-md-3'>
+            <span style={{color: 'red'}}>{this.state.errorMessage}</span>
+          </div>
+          <div className='col-md-6'></div>
+        </div>
+
+        <div className='row' style={{marginTop: 30}}>
+          <div className='col-md-3'></div>
           <div className='col-md-3 input-group' style={{paddingLeft: 15}}>
             <span className='input-group-addon' style={{width:100}}>Name:</span>
             <input
+              onChange={this.inputSomething}
               ref={(input) => { this.commentName = input; }}
               className='form-control'
               type="text" />
@@ -132,6 +148,7 @@ class CommentOnPost extends Component {
           <div className='col-md-3'></div>
           <div className='col-md-6'>
             <textarea
+              onChange={this.inputSomething}
               ref={(input) => { this.commentBody = input; }}
               placeholder='write something here...'
               className='form-control'></textarea>

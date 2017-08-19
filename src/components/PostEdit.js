@@ -29,7 +29,7 @@ class PostEdit extends Component {
 
   // check postId here
   checkIfUpdate = () => {
-    
+
     if ( this.props.match && this.props.match.params && this.props.match.params.postId ) {
       this.postId = this.props.match.params.postId;
     }
@@ -130,6 +130,11 @@ class PostEdit extends Component {
           createError: null
         })
 
+        // back to top
+        setTimeout(() => {
+          this.props.history.push("/")
+        }, 1000)
+
       } else {
         this.setState({
           createSuccess: false,
@@ -190,9 +195,9 @@ class PostEdit extends Component {
           <div className='col-md-12'>
 
             {this.postId ? (
-              <span style={{ fontSize: 20 }}>Update the post</span>
+              <span style={{ fontSize: 28 }}>Update a post</span>
             ):(
-              <span style={{ fontSize: 20 }}>Create a post</span>
+              <span style={{ fontSize: 28 }}>Create a post</span>
             )}
 
           </div>
@@ -334,25 +339,9 @@ class PostEdit extends Component {
 
 // react-redux
 function mapStateToProps ( {categories} ) {
-  // console.log("edit mapStateToProps 1:", categories)
-  // let categories_1 = []
-  // if (categories && categories.categories && categories.categories.length !== undefined) {
-  //   console.log("edit mapStateToProps 2:", categories)
-  //   categories_1 = categories.categories
-  // }
   return {
     categories
   }
 }
 
-// function mapDispatchToProps (dispatch) {
-//   return {
-//     selectRecipe: (data) => dispatch(addRecipe(data)),
-//     remove: (data) => dispatch(removeFromCalendar(data))
-//   }
-// }
-
-// export default PostEdit
-// export default connect( mapStateToProps, mapDispatchToProps )(PostEdit)
-// export default connect( mapStateToProps )(PostEdit)
 export default withRouter( connect( mapStateToProps )(PostEdit) )

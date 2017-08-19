@@ -4,7 +4,7 @@ import downvote from '../downvote.png'
 import * as MyAPI from '../utils/MyAPI'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router';
-import { apiUpdateComment, apiDeleteComment } from '../actions'
+import { apiUpdateComment, apiDeleteComment } from '../actions/CommentsActions'
 // import Modal from 'react-modal'
 
 class CommentOnPostItem extends Component {

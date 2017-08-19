@@ -4,7 +4,7 @@ import upvote from '../upvote.png'
 import downvote from '../downvote.png'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router';
-import { apiUpdatePost } from '../actions'
+import { apiUpdatePost, apiDeletePost } from '../actions/PostsActions'
 import * as MyAPI from '../utils/MyAPI'
 
 class PostListItem extends Component {
@@ -12,6 +12,23 @@ class PostListItem extends Component {
   voteClicked = (option) => {
     MyAPI.voteOnPostWithID(this.props.post.id, option).then((data) => {
       this.props.mapDispatchToPropsUpdatePost(data)
+    })
+  }
+
+  deletePost = () => {
+    MyAPI.deletePostsWithID(this.props.post.id).then((data) => {
+      
+      if (data === 200){
+        this.props.mapDispatchToPropsDeletePost(this.props.post.id)
+
+        // back to top
+        setTimeout(() => {
+          this.props.history.push("/")
+        }, 1000)
+
+      } else {
+        console.log("something went wrong")
+      }
     })
   }
 
@@ -25,13 +42,11 @@ class PostListItem extends Component {
 
         <div className='row'>
           <div className='col-md-2'></div>
-          <div className='col-md-4' style={{ textAlign: 'left'}}>
-            <span>{dispDate}</span>
+          <div className='col-md-4' style={{textAlign: 'left'}}>
+            Category:<span style={{color: 'green'}}>{this.props.post.category}</span>
           </div>
-
-          <div className='col-md-4' style={{ textAlign: 'right'}}>
-            ({this.props.post.category}) , {this.props.post.voteScore} votes
-
+          <div className='col-md-4' style={{textAlign: 'right'}}>
+            Votes ({this.props.post.voteScore})
             <img
               onClick={() => this.voteClicked('upVote')}
               src={upvote} alt={"upvote"} style={{
@@ -39,7 +54,6 @@ class PostListItem extends Component {
                 marginLeft:10,
                 cursor: 'pointer'
               }}/>
-
             <img
               onClick={() => this.voteClicked('downVote')}
               src={downvote} alt={"downvote"} style={{
@@ -47,7 +61,19 @@ class PostListItem extends Component {
                 marginLeft:10,
                 cursor: 'pointer'
               }}/>
+          </div>
+          <div className='col-md-2'></div>
+        </div>
 
+
+        <div className='row'>
+          <div className='col-md-2'></div>
+          <div className='col-md-4' style={{ textAlign: 'left'}}>
+            <span>{dispDate}</span>
+          </div>
+
+          <div className='col-md-4' style={{ textAlign: 'right'}}>
+            by {this.props.post.author}
           </div>
 
           <div className='col-md-2'></div>
@@ -55,7 +81,7 @@ class PostListItem extends Component {
 
         <div className='row'>
           <div className='col-md-2'></div>
-          <div className='col-md-8' style={{ textAlign: 'left', fontSize:18 }}>
+          <div className='col-md-8' style={{ textAlign: 'left', fontSize:22 }}>
             <Link to={'/'+this.props.post.category+'/'+this.props.post.id }>{this.props.post.title}</Link>
           </div>
           <div className='col-md-2'></div>
@@ -67,8 +93,10 @@ class PostListItem extends Component {
             borderBottomColor: '#cccccc',
           }}>
           <div className='col-md-2'></div>
-          <div className='col-md-8' style={{ textAlign: 'right', fontSize:14 }}>
-            by {this.props.post.author}
+          <div className='col-md-8' style={{ textAlign: 'right'}}>
+            <span
+              onClick={this.deletePost}
+              style={{cursor: 'pointer', color: '#337ab7'}}>Delete this post</span>
           </div>
           <div className='col-md-2'></div>
         </div>
@@ -83,7 +111,9 @@ class PostListItem extends Component {
 function mapDispatchToProps (dispatch) {
   return {
     mapDispatchToPropsUpdatePost: (data) => dispatch(apiUpdatePost({ post: data})),
+    mapDispatchToPropsDeletePost: (data) => dispatch(apiDeletePost({ postId: data})),
   }
 }
+
 
 export default withRouter(connect( null, mapDispatchToProps )(PostListItem))

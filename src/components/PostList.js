@@ -5,7 +5,7 @@ import PostListItem from './PostListItem'
 
 import shortid from 'shortid'
 
-import { apiGetPosts } from '../actions'
+import { apiGetPosts } from '../actions/PostsActions'
 
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router'
@@ -21,9 +21,6 @@ class PostList extends Component {
 
   // lets get category here
   componentDidMount() {
-
-    console.log("props:", this.props)
-
     MyAPI.getAllPosts().then((data) => {
       const posts = data.filter( (post) => post.deleted !== true )
       this.props.mapDispatchToPropsGetPosts(posts)
@@ -45,8 +42,12 @@ class PostList extends Component {
       voteWeight: 'bold',
     })
   }
-  
+
   render() {
+
+    if (!this.props || !this.props.posts || !this.props.posts.list ){
+      return(<div>Loading...</div>)
+    }
 
     let filterCategory = null;
     if (this.props.match && this.props.match.params && this.props.match.params.category) {
@@ -82,6 +83,12 @@ class PostList extends Component {
 
     return(
       <div>
+
+        <div className='row' style={{marginBottom: 30}}>
+          <div className='col-md-12' style={{fontSize: 28}}>
+            <span>Posts and comments app written by</span> <span style={{color: 'red'}}>React</span>
+          </div>
+        </div>
 
         <div className='row' style={{marginBottom: 30}}>
           <div className='col-md-12'>

@@ -2,22 +2,22 @@ import React, { Component } from 'react';
 // import logo from './logo.svg';
 import '../App.css';
 
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import PostEdit from './PostEdit'
 import NoMatch from './NoMatch'
 
 import * as MyAPI from '../utils/MyAPI'
 
-// import { Link } from 'react-router-dom'
-
-import PostList from './PostList'
+// import PostList from './PostList'
 import PostDetail from './PostDetail'
 
 // redux
 import { connect } from 'react-redux'
-import { apiGetCategories } from '../actions'
+import { apiGetCategories } from '../actions/CategoriesActions'
 
 import { withRouter } from 'react-router';
+
+import MainPage from './MainPage'
 
 class App extends Component {
 
@@ -39,47 +39,21 @@ class App extends Component {
             <PostEdit />
           )} />
 
-          <Route exact path='/update_post/:postId' render={() => (
+          <Route exact path='/notfound' component={NoMatch} />
+
+          <Route path='/update_post/:postId' render={() => (
             <PostEdit />
           )} />
 
-          <Route exact path='/:category' render={() => (
-            <div className='container'>
-
-              <div className='row' style={{
-                marginTop:30,
-                marginBottom:30
-              }}>
-                <div className='col-md-12' style={{
-                  textAlign: 'right'
-                }}>
-                  <Link to="/ceate_post">Create a post</Link>
-                </div>
-              </div>
-
-              <PostList />
-            </div>
-          )} />
-
           <Route exact path='/' render={() => (
-            <div className='container'>
-
-              <div className='row' style={{
-                marginTop:30,
-                marginBottom:30
-              }}>
-                <div className='col-md-12' style={{
-                  textAlign: 'right'
-                }}>
-                  <Link to="/ceate_post">Create a post</Link>
-                </div>
-              </div>
-
-              <PostList />
-            </div>
+            <MainPage />
           )} />
 
           <Route path='/:category/:postId' component={PostDetail}/>
+
+          <Route path='/:category' render={() => (
+              <MainPage />
+          )} />
 
           <Route component={NoMatch} />
 
